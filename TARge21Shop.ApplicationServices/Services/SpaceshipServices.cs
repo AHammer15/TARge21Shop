@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TARge21Shop.Core.Domain.Spaceship;
 using TARge21Shop.Core.Domain.SpaceShip;
 using TARge21Shop.Core.Dto;
 using TARge21Shop.Core.ServiceInterface;
@@ -35,7 +34,7 @@ namespace TARge21Shop.ApplicationServices.Services
                 Crew = dto.Crew,
                 Passengers = dto.Passengers,
                 CargoWeight = dto.CargoWeight,
-                FullTripsCount = dto.FullTripsCount,
+                FullTripCount = dto.FullTripCount,
                 MaintenanceCount = dto.MaintenanceCount,
                 LastMaintenance = dto.LastMaintenance,
                 EnginePower = dto.EnginePower,
@@ -62,7 +61,7 @@ namespace TARge21Shop.ApplicationServices.Services
                 Crew = dto.Crew,
                 Passengers = dto.Passengers,
                 CargoWeight = dto.CargoWeight,
-                FullTripsCount = dto.FullTripsCount,
+                FullTripCount = dto.FullTripCount,
                 MaintenanceCount = dto.MaintenanceCount,
                 LastMaintenance = dto.LastMaintenance,
                 EnginePower = dto.EnginePower,
@@ -95,6 +94,14 @@ namespace TARge21Shop.ApplicationServices.Services
             await _context.SaveChangesAsync();
 
             return spaceshipId;
+        }
+
+        public async Task<Spaceship> GetAsync(Guid id)
+        {
+            var result = await (_context.Spaceships
+                .FirstOrDefaultAsync(x => x.Id == id));
+
+            return result;
         }
 
 

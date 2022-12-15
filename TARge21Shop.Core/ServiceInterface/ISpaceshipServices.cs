@@ -1,5 +1,4 @@
-﻿using TARge21Shop.Core.Domain.Spaceship;
-using TARge21Shop.Core.Domain.SpaceShip;
+﻿using TARge21Shop.Core.Domain.SpaceShip;
 using TARge21Shop.Core.Dto;
 
 namespace TARge21Shop.Core.ServiceInterface
@@ -10,5 +9,6 @@ namespace TARge21Shop.Core.ServiceInterface
         Task<Spaceship> GetUpdate(Guid id);
         Task<Spaceship> Update(SpaceshipDto dto);
         Task<Spaceship> Delete(Guid id);
+        Task<Spaceship> GetAsync(Guid id);
     }
 }
