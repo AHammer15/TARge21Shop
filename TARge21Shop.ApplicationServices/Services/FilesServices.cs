@@ -46,7 +46,7 @@ namespace TARge21Shop.ApplicationServices.Services
                 }
 
             }
-            return null;
+            
             
         }
     }

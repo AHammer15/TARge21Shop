@@ -18,7 +18,7 @@ namespace TARge21Shop.ApplicationServices.Services
 
         public SpaceshipsServices
             (
-                TARge21ShopContext context, 
+                TARge21ShopContext context,
                 IFilesServices files
             )
         {
@@ -51,6 +51,7 @@ namespace TARge21Shop.ApplicationServices.Services
             {
                 _files.UploadFileToDatabase(dto, spaceship);
             }
+
 
             await _context.Spaceships.AddAsync(spaceship);
             await _context.SaveChangesAsync();
@@ -85,7 +86,6 @@ namespace TARge21Shop.ApplicationServices.Services
             return domain;
         }
 
-        
 
         public async Task<Spaceship> Delete(Guid id)
         {
@@ -100,13 +100,10 @@ namespace TARge21Shop.ApplicationServices.Services
 
         public async Task<Spaceship> GetAsync(Guid id)
         {
-            var result = await (_context.Spaceships
-                .FirstOrDefaultAsync(x => x.Id == id));
+            var result = await _context.Spaceships
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
         }
-
-
-
     }
 }

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-
-namespace TARge21Shop.Models.Spaceship
+﻿namespace TARge21Shop.Models.Spaceship
 {
     public class SpaceshipCreateUpdateViewModel
     {
@@ -18,9 +15,10 @@ namespace TARge21Shop.Models.Spaceship
         public DateTime MaidenLaunch { get; set; }
         public DateTime BuiltDate { get; set; }
 
-        //only in DB
+        // only in database
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
+
         public List<IFormFile> Files { get; set; }
         public List<ImageViewModel> Image { get; set; } = new List<ImageViewModel>();
     }
