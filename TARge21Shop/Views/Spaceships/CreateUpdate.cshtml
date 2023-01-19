@@ -115,6 +115,11 @@
             </div>
         </div>
 
+        @foreach (var images in Model.Image) 
+        {
+            <input asp-action="removeImage" asp-controller="spaceships" asp-route-imageId="@images.ImageId" type="submit" class="btn btn-danger" value="Remove Image" />
+        }
+
         @if (Model.Id.HasValue)
         {
             <input asp-action="Update" asp-controller="spaceships" type="submit" class=" btn btn-primary" value="Update" />
