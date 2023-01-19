@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using TARge21Shop.Core.Domain;
@@ -48,6 +50,18 @@ namespace TARge21Shop.ApplicationServices.Services
             }
             
             
+        }
+
+        public async Task<FileToDatabase> RemoveImage(FileToDatabaseDto dto)
+        {
+            var image = await _context.FileToDatabase
+                .Where(X => X.Id == dto.Id)
+                .FirstOrDefaultAsync();
+
+            _context.FileToDatabase.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return image;
         }
     }
 }

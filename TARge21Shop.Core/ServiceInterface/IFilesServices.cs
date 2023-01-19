@@ -11,5 +11,6 @@ namespace TARge21Shop.Core.ServiceInterface
     public interface IFilesServices
     {
         void UploadFileToDatabase(SpaceshipDto dto, Spaceship domain);
+        Task<FileToDatabase> RemoveImage(FileToDatabaseDto dto);
     }
 }

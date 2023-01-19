@@ -18,6 +18,10 @@ namespace TARge21Shop.Models.Spaceship
         public DateTime MaidenLaunch { get; set; }
         public DateTime BuiltDate { get; set; }
 
+        
+        public List<IFormFile> Files { get; set; }
+        public List<ImageViewModel> Image { get; set; } = new List<ImageViewModel>();
+
         //only in DB
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }

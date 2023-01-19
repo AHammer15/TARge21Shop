@@ -80,6 +80,11 @@ namespace TARge21Shop.ApplicationServices.Services
                 ModifiedAt = DateTime.Now,
             };
 
+            if (dto.Files != null)
+            {
+                _files.UploadFileToDatabase(dto, domain);
+            }
+
             _context.Spaceships.Update(domain);
             await _context.SaveChangesAsync();
 

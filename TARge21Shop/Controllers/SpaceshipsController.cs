@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using TARge21Shop.Core.Dto;
 using TARge21Shop.Core.ServiceInterface;
 using TARge21Shop.Data;
 using TARge21Shop.Models.Spaceship;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TARge21Shop.Controllers
 {
@@ -11,15 +13,18 @@ namespace TARge21Shop.Controllers
     {
         private readonly TARge21ShopContext _context;
         private readonly ISpaceshipsServices _spaceshipsServices;
+        private readonly IFilesServices _filesServices;
 
         public SpaceshipsController
             (
                 TARge21ShopContext context,
-                ISpaceshipsServices spaceshipsServices
+                ISpaceshipsServices spaceshipsServices,
+                IFilesServices filesServices
             )
         {
             _context = context;
             _spaceshipsServices = spaceshipsServices;
+            _filesServices = filesServices;
         }
 
 
@@ -150,7 +155,15 @@ namespace TARge21Shop.Controllers
                 MaidenLaunch = vm.MaidenLaunch,
                 BuiltDate = vm.BuiltDate,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                ModifiedAt = vm.ModifiedAt,
+                Files = vm.Files,
+                Image = vm.Image.Select(x => new Core.Dto.FileToDatabaseDto
+                {
+                    Id = x.ImageId,
+                    ImageData = x.ImageData,
+                    ImageTitle = x.ImageTitle,
+                    SpaceshipId = x.SpaceshipId,
+                }).ToArray()
             };
 
             var result = await _spaceshipsServices.Update(dto);
@@ -217,25 +230,37 @@ namespace TARge21Shop.Controllers
                 return NotFound();
             }
 
-            var vm = new SpaceshipDeleteViewModel()
-            {
-                Id = spaceship.Id,
-                Name = spaceship.Name,
-                Type = spaceship.Type,
-                Crew = spaceship.Crew,
-                Passengers = spaceship.Passengers,
-                CargoWeight = spaceship.CargoWeight,
-                FullTripCount = spaceship.FullTripCount,
-                MaintenanceCount = spaceship.MaintenanceCount,
-                LastMaintenance = spaceship.LastMaintenance,
-                EnginePower = spaceship.EnginePower,
-                MaidenLaunch = spaceship.MaidenLaunch,
-                BuiltDate = spaceship.BuiltDate,
-                CreatedAt = spaceship.CreatedAt,
-                ModifiedAt = spaceship.ModifiedAt
-            };
+            var photos = await _context.FileToDatabase
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new ImageViewModel
+                {
+                    SpaceshipId = y.Id,
+                    ImageId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64, {0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
 
-            return View(vm);
+            var vm = new SpaceshipDeleteViewModel();
+
+
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Type = spaceship.Type;
+            vm.Crew = spaceship.Crew;
+            vm.Passengers = spaceship.Passengers;
+            vm.CargoWeight = spaceship.CargoWeight;
+            vm.FullTripCount = spaceship.FullTripCount;
+            vm.MaintenanceCount = spaceship.MaintenanceCount;
+            vm.LastMaintenance = spaceship.LastMaintenance;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.MaidenLaunch = spaceship.MaidenLaunch;
+            vm.BuiltDate = spaceship.BuiltDate;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Image.AddRange(photos);
+
+            return View("CreateUpdate", vm);
         }
 
         [HttpPost]
@@ -249,6 +274,26 @@ namespace TARge21Shop.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(ImageViewModel file)
+        {
+            var dto = new FileToDatabaseDto()
+            {
+                Id = file.ImageId
+            };
+
+            var image = await _filesServices.RemoveImage(dto);
+
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+
+
         }
     }
 }
