@@ -1,6 +1,6 @@
 ﻿namespace TARge21Shop.Models.RealEstate
 {
-    public class RealEstateIndexViewModel
+    public class RealEstateCreateUpdateViewModel
     {
         public Guid? Id { get; set; }
         public string Address { get; set; }
